@@ -1,151 +1,127 @@
-let c;
-let mouthAngle = 0;
-let cheek = 1;
-let browAngle = 0;
+let grid = [];
+let Rects = [];
+let col = 5, row = 10;
+let time = 0;
+
+class Person {
+  constructor(x, y, r, c = color(random(255), random(255), random(255))) {
+    this.x = x;
+    this.y = y;
+    this.r = r;
+    this.c = c;
+  }
+  shimmer() {
+    this.x += random(-1, 1);
+    this.y += random(-1, 1);
+  }
+  draw(opacity) {
+    if(opacity != undefined) this.c.setAlpha(opacity);
+    fill(this.c);
+    ellipse(this.x, this.y, this.r * 2, this.r * 2);
+  }
+  march(speed) {
+    this.y += speed;
+  }
+}
+
+class Rectangle {
+  constructor(x, y, w, h) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+  }
+  draw() {
+    rect(this.x, this.y, this.w, this.h);
+  }
+  move(speed) {
+    this.y += speed;
+  }
+}
+
+class Cross {
+  constructor(x, y, d, r) {
+    this.x = x;
+    this.y = y;
+    this.d = d;
+    this.r = r;
+  }
+  draw(opacity = 255) {
+    fill(255, opacity);
+    rect(this.x - this.d * 0.8, this.y - this.r - this.d * 0.2, this.d * 1.6, this.r * 2);
+    rect(this.x - this.r, this.y - this.d, this.r * 2, this.d * 2);
+  }
+}
 
 function setup() {
+  noStroke();
   createCanvas(800, 800);
-  background(255);
-  c = color(255, 220, 80);
+  background(0);
+  for (let i = 0; i < 10; ++i) {
+    Rects[i] = new Rectangle(0, i * height / 10, width, height / 50);
+  }
+  scene1_x = width / 8;
+  scene1_y = height / 8;
+  scenewidth = width * 3 / 4;
+  sceneheight = height * 3 / 4;
+  for (let i = 0; i < col; i++) {
+    grid[i] = [];
+    for (let j = 0; j < row; j++) {
+      let x = scene1_x + i * scenewidth / col + scenewidth / col / 2;
+      let y = scene1_y + j * sceneheight * 2 / row + sceneheight / row / 2 - height * 1.5;
+      grid[i][j] = new Person(x, y, 12.5, color(255, 255, 255));
+    }
+  }
 }
 
 function draw() {
-  background(255);
-  face(width / 2, height / 2, 220, c);
+  background(0);
+  back();
+  if (millis() < 15000) {
+    scene0(map(millis(), 0, 15000, 255, 0));
+  }
+  if (millis() > 2500 && millis() < 15000) {
+    scene1();
+  }
 }
 
-function face(cx, cy, d, c) {
-
+function back() {
   noStroke();
-  fill(c);
-  ellipse(cx, cy, d, d);
-
-  //cheek
-  ellipse(cx, cy + d * 0.15, d * cheek, d * cheek);
-  //ellipse(cx, cy + d * 0.15, d * 1.05, d * 1.05);
-
-  let eyeX = d * 0.22;
-  let eyeY = d * 0.1;
-  let eyeR = d * 0.18;
-  let leftX = cx - eyeX;
-  let rightX = cx + eyeX;
-  let vertY = cy - eyeY;
-
-  //eyes
-  fill(255);
-  eye(leftX, vertY, eyeR, PI - PI / 12, TWO_PI + PI / 12);
-  eye(rightX, vertY, eyeR, PI - PI / 12, TWO_PI + PI / 12);
-
-  //eyebrows
-  stroke(5);
-  line(leftX - d * 0.125 * cos(browAngle), vertY - d * 0.3 - d * 0.125 * sin(browAngle),
-       leftX + d * 0.125 * cos(browAngle), vertY - d * 0.3 + d * 0.125 * sin(browAngle));
-  line(rightX - d * 0.125 * cos(browAngle), vertY - d * 0.3 + d * 0.125 * sin(browAngle),
-       rightX + d * 0.125 * cos(browAngle), vertY - d * 0.3 - d * 0.125 * sin(browAngle));
-
-  //mouth
-  //mouth(cx, cy + d * 0.025, d);
-
-  //tongue
-  //beginShape();
-  //fill('#F9BEDD');
-  //noStroke();
-  //for (let a = -PI / 2 - atan(3.5 / 1.5); a <= -PI / 2 + atan(3.5 / 1.5); a += 0.005) {
-  //  let x = cx + cos(a) * d * 0.15;
-  //  let y = cy + d * 0.4 + sin(a) * d * 0.15;
-  //  vertex(x, y);
-  //}
-  //endShape(CLOSE);
-
-  //arcmouth
-  noFill();
-  strokeWeight(5);
-  stroke(0);
-  if (abs(mouthAngle) < 0.01) line(cx - d * 0.175, cy + 0.3 * d, cx + d * 0.175, cy + 0.3 * d);
-  else if (mouthAngle > 0) {
-    arc(cx, cy + 0.3 * d, d * 0.35, d * mouthAngle, 0, PI);
-  } else {
-    arc(cx, cy + 0.3 * d, d * 0.35, d * -mouthAngle, PI, TWO_PI);
+  fill(255, 100);
+  for (let i = 0; i < Rects.length; ++i) {
+    Rects[i].draw();
+    Rects[i].move(0.5);
+    if (Rects[i].y + Rects[i].h > height) {
+      rect(0, 0, width, Rects[i].y + Rects[i].h - height);
+    }
+    if (Rects[i].y > height) {
+      Rects[i].y -= height;
+    }
   }
-
 }
 
-function eye(cx, cy, r, start, end) {
+function scene0(opacity) {
+  cruz = new Cross(width / 2, height / 2, 100, 10);
+  cruz.draw(opacity);
+}
 
-  //sclera
-  fill(255);
-  //stroke(0);
-  //strokeWeight(r * 0.1);
-  beginShape();
-  strokeJoin(ROUND);
-  for (let a = start; a <= end; a += 0.05) {
-    let x = cx + cos(a) * r;
-    let y = cy + sin(a) * r;
-    vertex(x, y);
-  }
-  endShape(CLOSE);
-
-  //pupil
-  fill(0);
+function scene1() {
+  // background(0);
   noStroke();
-  let pupilR = r * 0.5;
-  let innerR = r - pupilR * 1;
-  let dx = mouseX - cx;
-  let dy = mouseY - cy;
-  let dR = sqrt(dx * dx + dy * dy);
-  if (dR > innerR) {
-    dx = dx / dR * innerR;
-    dy = dy / dR * innerR;
-  }
-  if (dy > sin(start) * r - (r - pupilR * 1.5)) dy = sin(start) * r - (r - pupilR * 1.5);
-  fill(0);
-  ellipse(cx + dx, cy + dy, pupilR, pupilR);
-
-}
-
-function mouth(cx, cy, d) {
   fill(255);
-  beginShape();
-  fill('#871945');
-  noStroke();
-  //stroke(0);
-  //strokeWeight(d * 0.025);
-  strokeJoin(ROUND);
-  for (let a = 0; a <= PI; a += 0.005) {
-    let x = cx + cos(a) * d * 0.35;
-    let y = cy + sin(a) * d * 0.35;
-    vertex(x, y);
+  if(time === 0) time = millis() + 1000;
+  for (let i = 0; i < col; i++) {
+    for (let j = 0; j < row; j++) {
+      let op = millis() > 7500 ? map(millis(), 7500, 15000, 255, 0) : 255;
+      grid[i][j].draw(op);
+    }
   }
-  endShape(CLOSE);
-}
-
-function mousePressed() { //left click to change color
-  c = color(random(255), random(255), random(255));
-  if (mouseButton === RIGHT) { //right click to reset everything
-    c = color(255, 220, 80);
-    mouthAngle = 0;
-    browAngle = 0;
+  if (millis() > time) {
+    for (let i = 0; i < col; i++) {
+      for (let j = 0; j < row; j++) {
+        grid[i][j].march(75);
+      }
+    }
+    time += 1000;
   }
-  print("(" + red(c) + ", " + green(c) + ", " + blue(c) + ")");
-}
-
-function mouseWheel(event) { //use wheel to change lips
-  let delta = event.delta * 0.0005;
-  mouthAngle += delta;
-  mouthAngle = constrain(mouthAngle, -0.3, 0.3);
-  print(mouthAngle);
-}
-
-function keyPressed() { //use up and down keys to change expression
-  if (keyCode === UP_ARROW) {
-    cheek += 0.01;
-    browAngle += PI / 30;
-  } else if (keyCode === DOWN_ARROW) {
-    cheek -= 0.01;
-    browAngle -= PI / 30;
-  }
-  cheek = constrain(cheek, 0.95, 1.05);
-  browAngle = constrain(browAngle, -PI / 6, PI / 6);
-  print(int(cheek));
-  print(int(browAngle / PI * 180) + " degrees");
 }
