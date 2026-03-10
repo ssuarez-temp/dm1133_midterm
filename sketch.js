@@ -27,7 +27,7 @@ function setup() {
       p.startY = -random(100,300);
       p.x = p.startX;
       p.y = p.startY;
-      p.startTime = random(1000,4000);
+      p.startTime = random(2500,5000);
       p.duration = random(5000,7500);
       p.easePow = random(2.2,3.2);
     }
@@ -48,8 +48,8 @@ function setup() {
   grid[1][4].c = color(255, 170, 0);
   grid[2][4].c = color(255, 170, 0);
   grid[3][4].c = color(255, 170, 0);
-  //Then they came for me.
-  grid[2][2].c = color(255, 255, 255, 192);
+  //Then they came for me—
+  grid[2][2].c = color(224, 224, 224);
 }
 
 function draw() {
@@ -58,8 +58,8 @@ function draw() {
   // if (millis() < 15000) {
   //   scene0(map(millis(),0,15000,255,0));
   // }
-  scene0(map(millis(),0,15000,255,64)); // the cross
-  if (millis() > 1000) {
+  scene0(map(millis(),0,12500,255,64)); // the cross
+  if (millis() > 2500) {
     scene1();
   }
 }
