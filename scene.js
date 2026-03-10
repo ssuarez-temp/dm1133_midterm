@@ -8,7 +8,7 @@ class Person {
     this.x = x;
     this.y = y;
     this.r = r;
-    this.c = c;
+    this.c = c; // color
     this.startX = x;
     this.startY = y;
     this.targetX = x;
@@ -17,7 +17,7 @@ class Person {
     this.duration = 0;
     this.easePow = 3;
   }
-  shimmer() {
+  shimmer() { // shimmering
     this.x += random(-1, 1);
     this.y += random(-1, 1);
   }
@@ -49,7 +49,7 @@ class Rectangle {
   }
 }
 
-class Cross {
+class Cross { // la cruz
   constructor(x, y, d, r) {
     this.x = x;
     this.y = y;
@@ -63,7 +63,7 @@ class Cross {
   }
 }
 
-function back() {
+function back() { // background rectangles, mimicing television static
   noStroke();
   fill(255, 100);
   for (let i = 0; i < Rects.length; ++i) {
