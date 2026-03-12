@@ -1,14 +1,22 @@
 let grid = [];
 let Rects = [];
-let time = 0;
+
+let elimQueue = [];
+let curr = null;
+let lastReplaced = 0;
+let interval = 1000;
 
 class Person {
 
-  constructor(x, y, r, c = color(random(255), random(255), random(255))) {
+  constructor(x, y, r, c = color(random(255), random(255), random(255)), group = null) {
+    // position
     this.x = x;
     this.y = y;
+    // radius
     this.r = r;
-    this.c = c; // color
+    // color
+    this.c = c;
+    // entering
     this.startX = x;
     this.startY = y;
     this.targetX = x;
@@ -16,10 +24,24 @@ class Person {
     this.startTime = 0;
     this.duration = 0;
     this.easePow = 3;
+    // scanned
+    this.group = group;
+    this.scanned = false;
   }
   shimmer() { // shimmering
     this.x += random(-1, 1);
     this.y += random(-1, 1);
+  }
+  march(speed) {
+    this.y += speed;
+  }
+  changeGroup(newGroup, newColor) {
+    this.group = newGroup;
+    this.c = newColor;
+  }
+  replaced() {
+    this.scanned = true;
+    this.changeGroup(null, color(255));
   }
   draw(opacity) {
     if (opacity !== undefined) {
@@ -28,9 +50,6 @@ class Person {
       fill(this.c);
     }
     ellipse(this.x, this.y, this.r * 2, this.r * 2);
-  }
-  march(speed) {
-    this.y += speed;
   }
 }
 
@@ -81,4 +100,15 @@ function back() { // background rectangles, mimicing television static
 function scene0(opacity) {
   cruz = new Cross(width / 2, height / 2, 100, 10);
   cruz.draw(opacity);
+}
+
+function killUpdate() {
+  if(elimQueue.length > 0 && curr === null && millis() - lastReplaced >= interval) {
+    curr = elimQueue.shift(); // first-in-first-out
+    curr.replaced();
+    lastReplaced = millis();
+  }
+  if(curr !== null && curr.scanned == true) {
+    curr = null;
+  }
 }
