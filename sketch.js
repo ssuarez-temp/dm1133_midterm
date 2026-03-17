@@ -1,13 +1,18 @@
 let col = 5, row = 5;
 
 let scanY = 0;        // scan line
-let scanSpeed = 1.5;
 let scanHeight = 50;  // the "height" of the scan line
-
 let scanParticles = [];
+let scanBase, scanSpeed;
 
+function nextScene() {
+  if (scanY > height + scanHeight) return true;
+  else return false;
+}
 
 function setup() {
+  scanBase = height * 0.018;
+  scanSpeed = scanBase * 1.5;
   noStroke();
   createCanvas(windowWidth, windowHeight);
   background(0);
@@ -78,6 +83,7 @@ function draw() {
   if (millis() > 2500) {
     scene1();
   }
+  //And I did not speak out, because I was not a Communist;
   if (millis() > 10000 && !triggeredScenes["Communists"]) {
     activeScene = "Communists";
     triggeredScenes["Communists"] = true;
@@ -85,25 +91,25 @@ function draw() {
   } else if (activeScene === "Communists") {
     scene2(activeScene);
   }
-  //And I did not speak out, because I was not a Communist;
-  if (millis() > 20000 && !triggeredScenes["Socialists"]) {
+  //And I did not speak out, because I was not a Socialist;
+  if (millis() > 20000 && !triggeredScenes["Socialists"] && nextScene()) {
     activeScene = "Socialists";
     triggeredScenes["Socialists"] = true;
     scene2(activeScene, true);
   } else if (activeScene === "Socialists") {
     scene2(activeScene);
   }
-  //And I did not speak out, because I was not a Socialist;
-  if (millis() > 30000 && !triggeredScenes["Trade Unionists"]) {
+  //And I did not speak out, because I was not a Trade Unionist;
+  if (millis() > 30000 && !triggeredScenes["Trade Unionists"] && nextScene()) {
     activeScene = "Trade Unionists";
     triggeredScenes["Trade Unionists"] = true;
     scene2(activeScene, true);
   } else if (activeScene === "Trade Unionists") {
     scene2(activeScene);
   }
-  //And I did not speak out, because I was not a Trade Unionist;
-  if (millis() > 42500 && !triggeredScenes["none"]) {
-    scanSpeed = 2.5;
+  //M A S S A C R E
+  if (millis() > 42500 && !triggeredScenes["none"] && nextScene()) {
+    scanSpeed = scanBase * 2.25;
     elimInterval = 175;
     for (let i = 0; i < col; ++i) {
       for (let j = 0; j < row; ++j) {
@@ -124,9 +130,10 @@ function draw() {
   } else if (activeScene === "none") {
     scene2(activeScene);
   }
-  //M A S S A C R E
+  //And there was no one left
+  //To speak out for me
   if (millis() > 52500 && !triggeredScenes["Me"]) {
-    scanSpeed = 1;
+    scanSpeed = scanBase * 1;
     targetInterval = 1250;
     activeScene = "Me";
     triggeredScenes["Me"] = true;
@@ -134,8 +141,6 @@ function draw() {
   } else if (activeScene === "Me") {
     scene2(activeScene);
   }
-  //And there was no one left
-  //To speak out for me
 }
 
 function scene1() {
