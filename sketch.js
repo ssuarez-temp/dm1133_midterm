@@ -17,7 +17,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   background(0);
   for (let i = 0; i < 10; ++i) {
-    Rects[i] = new Rectangle(0, i * height / 10, width, height / 50);
+    Rects[i] = new Rectangle(0, i * height / 10, width, height / 100);
   }
   scene1_x = width / 8;
   scene1_y = height / 8;

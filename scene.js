@@ -275,7 +275,7 @@ function drawTime() { // time for testing purposes
 
 function scene0(opacity) {
   cruz = new Cross(width / 2, height / 2, 100, 10);
-  cruz.draw(opacity);
+  // cruz.draw(opacity);
 }
 
 function drawScanParticles() {
