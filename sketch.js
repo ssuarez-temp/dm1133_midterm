@@ -79,7 +79,11 @@ function draw() {
   //   scene0(map(millis(),0,15000,255,0));
   // }
   drawTime();
-  scene0(map(constrain(millis(), 0, 12500), 0, 12500, 255, 64)); // the cross
+  // in the final version the cross was removed to avoid religious implications;
+  // I asked AI for suggestion because in the preview the scanning line moved too slow for transition;
+  // The original transition was made solely of nextScene() and millis().
+  // With AI I used triggeredScenes and activeScene to control in case the scan line is still moving but the scene has already changed.
+  scene0(map(constrain(millis(), 0, 12500), 0, 12500, 255, 64));
   if (millis() > 2500) {
     scene1();
   }
@@ -163,12 +167,14 @@ function scene2(group, resetScan = false) {
     scanY = 0;
   }
   killUpdate();
+  // Following comment was the original scan line
   // for (let i = 0; i > -scanHeight; --i) {
   //   let opacity = map(i, 0, -scanHeight, 255, 0);
   //   fill(255, opacity);
   //   noStroke();
   //   rect(0, scanY + i, width, 1);
   // }
+  // I asked AI to help me make it into particle effects
   drawScanParticles();
   let scanTop = scanY;
   let scanBottom = scanY - scanHeight;

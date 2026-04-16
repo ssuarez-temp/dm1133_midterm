@@ -39,6 +39,7 @@ class Particle {
     fill(this.r, this.g, this.b, this.life);
     ellipse(this.x, this.y, r);
   }
+  // In particular, I asked AI for this for removing.
   dead() {
     return this.life <= 0;
   }
@@ -274,7 +275,7 @@ function drawTime() { // time for testing purposes
 }
 
 function scene0(opacity) {
-  cruz = new Cross(width / 2, height / 2, 100, 10);
+  // cruz = new Cross(width / 2, height / 2, 100, 10);
   // cruz.draw(opacity);
 }
 
